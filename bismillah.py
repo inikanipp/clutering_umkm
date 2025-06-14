@@ -220,9 +220,9 @@ div[data-testid="stFileUploader"] > div {
         <a class="nav-link" style="text-decoration: none; color:black" href="#bu">Bussiness Understanding</a>
         <a class="nav-link" style="text-decoration: none; color:black" href="#du">Data Understanding</a>
         <a class="nav-link" style="text-decoration: none; color:black" href="#dp">Data Preparation</a>
-        <a class="nav-link" style="text-decoration: none; color:black" href="#km">K-Means</a>
-        <a class="nav-link" style="text-decoration: none; color:black" href="#silhouette">Silhouette</a>
-        <a class="nav-link" style="text-decoration: none; color:black" href="#ad">Analisis Data</a>
+        <a class="nav-link" style="text-decoration: none; color:black" href="#model">K-Means</a>
+        <a class="nav-link" style="text-decoration: none; color:black" href="#eval">Silhouette</a>
+        <a class="nav-link" style="text-decoration: none; color:black" href="#ha">Analisis Data</a>
     </div>
     
 </div>
@@ -231,7 +231,7 @@ div[data-testid="stFileUploader"] > div {
 st.markdown(
     """
      <div class="title" style="font-size : 34px; padding-right : 10px; padding-left: 10px; font-weight: 900; text-align: center; margin-top : 50px">
-        <p>
+        <p style="font-weight : bold">
             SEGMENTASI UMKM MENGGUNAKAN METODE K-MEANS  CLUSTERING  UNTUK PERUMUSAN STRATEGI  PEMBINAAN  BERDASARKAN PREFERENSI MARKETPLACE
         </p>
     </div>
@@ -553,6 +553,13 @@ if df is None:
 # DATA PREPARATIONNNNNN ====================
 st.markdown(
     """
+    <div id="dp">
+
+    </div>""",
+    unsafe_allow_html=True
+)
+st.markdown(
+    """
     <div class="problem-box1">
         <h3>Data Preparation</h3>
     </div>""",
@@ -586,15 +593,16 @@ dataset_ori_clean = None
 if count_missing_rows is not None:
     col4, col5, col6 = st.columns([1, 34, 1])
     with col5:
-        st.text(f"Jumlah Baris Invalid dan Missing Values                   : {count_missing_rows}")
-        st.text(f"Jumlah Baris setelah Drop Missing dan Invalid Values      : {after_drop_missing_df.shape[0]}")
+        
+        st.success(f"Jumlah Baris Invalid dan Missing Values                   : {count_missing_rows}")
+        st.success(f"Jumlah Baris setelah Drop Missing dan Invalid Values      : {after_drop_missing_df.shape[0]}")
         dataset_ori_clean = after_drop_missing_df.copy()
 
 if count_missing_rows is None:
     col4, col5, col6 = st.columns([1, 34, 1])
     with col5:
-        st.text(f"Jumlah Baris Invalid dan Missing Values                   :0")
-        st.text(f"Jumlah Baris setelah Drop Missing dan Invalid Values      : 0")
+        st.error(f"Jumlah Baris Invalid dan Missing Values                   :0")
+        st.error(f"Jumlah Baris setelah Drop Missing dan Invalid Values      : 0")
 
 
 # ================================================= TRANSFORMASI DATA ============================================
@@ -782,6 +790,12 @@ if after_drop_missing_df is None:
             """, unsafe_allow_html=True
         )
 
+st.markdown(
+    """
+    <div id="model">
+    </div>""",
+    unsafe_allow_html=True
+)
 
 st.markdown(
     """
@@ -795,7 +809,8 @@ score = None
 if after_drop_missing_df is not None:
     col10, col11, col12 = st.columns([1, 34, 1])
     with col11:
-        k = st.slider("slide")
+        st.info("Set Your Cluster : ")
+        k = st.slider("",min_value=2, max_value=10)
         if st.button("Mulai Kluster") :
             kmeans = KMeans(n_clusters=k, random_state=42)
             labels = kmeans.fit_predict(df_numeric)
@@ -814,6 +829,12 @@ if after_drop_missing_df is None:
 
 st.markdown(
     """
+    <div id="eval">
+    </div>""",
+    unsafe_allow_html=True
+)
+st.markdown(
+    """
     <div class="problem-box1">
         <h3>Evaluation</h3>
     </div>""",
@@ -823,7 +844,10 @@ st.markdown(
 if score is not None:
     col10, col11, col12 = st.columns([1, 34, 1])
     with col11:
-        st.text(f"Score Silhouette Coeffecient : {score}")
+        st.success(f"Score Silhouette Coeffecient : {score}")
+
+
+
 
 if score is None:
     col10, col11, col12 = st.columns([1, 1, 1])
@@ -902,19 +926,14 @@ if score is not None:
 
         # Tampilkan ke Streamlit
         st.pyplot(fig)
-    st.markdown(
-        """
-        <h6 style="margin-top : 0;margin-left:70px">Overview Dataset : </h6>
-
-    """,unsafe_allow_html=True
-    )
+        st.info("Overview Dataset : ")
+    
     
     col10, col11, col12 = st.columns([1, 5, 1])
     with col11:
         dataset_ori_clean['cluster'] = cluster_series+1
         unique = list(dataset_ori_clean['cluster'].unique())
         st.dataframe(dataset_ori_clean)
-    st.badge("Overview Tiap Cluster : ", color="green")
     col13, col14, col15 = st.columns([1, 28, 1])
     with col14:
         for label in sorted(unique):
@@ -954,7 +973,7 @@ if score is None:
             }
             </style>
             <a href="#upload" style="text-decoration: none;">
-                <button class="custom-btn">Belum Ada Data 2</button>
+                <button class="custom-btn">Belum Ada Data</button>
             </a>
             """, unsafe_allow_html=True
         )
@@ -962,85 +981,100 @@ if score is None:
 
 st.markdown(
     """
-    <div class="problem-box1" >
-        <h3>Hasil Analisa</h3>
-    </div>""",
+    <div id="ha">
+
+    </div>
+    """,
     unsafe_allow_html=True
 )
+st.markdown(
+    """
+    <div class="problem-box1">
+        <h3>Hasil Analisa</h3>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 if score is not None:
     col10, col11, col12 = st.columns([1, 5, 1])
     with col11:
 
-        def get_kategori_umkm(omset_rata2):
-            if omset_rata2 <= 500_000_000:
-                return "UMKM Kecil"
-            else:
-                return "UMKM Menengah"
-
-        # Inisialisasi list untuk menyimpan data summary per cluster
         cluster_summary = []
 
-        # Loop setiap cluster unik
         for cl in sorted(dataset_ori_clean['cluster'].unique()):
             data_cl = dataset_ori_clean[dataset_ori_clean['cluster'] == cl]
 
+            omset_mean = data_cl['omset'].mean()
+            aset_mean = data_cl['aset'].mean()
+            tenaga_laki_mean = data_cl['tenaga_kerja_laki_laki'].mean()
+            tenaga_perempuan_mean = data_cl['tenaga_kerja_perempuan'].mean()
+
             omset_min = int(data_cl['omset'].min())
             omset_max = int(data_cl['omset'].max())
-            tenaga_perempuan_min = int(data_cl['tenaga_kerja_perempuan'].min())
-            tenaga_perempuan_max = int(data_cl['tenaga_kerja_perempuan'].max())
-            tenaga_laki_min = int(data_cl['tenaga_kerja_laki_laki'].min())
-            tenaga_laki_max = int(data_cl['tenaga_kerja_laki_laki'].max())
             aset_min = int(data_cl['aset'].min())
             aset_max = int(data_cl['aset'].max())
+
+            tenaga_laki_min = int(data_cl['tenaga_kerja_laki_laki'].min())
+            tenaga_laki_max = int(data_cl['tenaga_kerja_laki_laki'].max())
+            tenaga_perempuan_min = int(data_cl['tenaga_kerja_perempuan'].min())
+            tenaga_perempuan_max = int(data_cl['tenaga_kerja_perempuan'].max())
+
             kap_prod_min = int(data_cl['kapasitas_produksi'].min())
             kap_prod_max = int(data_cl['kapasitas_produksi'].max())
-            tahun_min = int(data_cl['tahun_berdiri'].min())
-            tahun_max = int(data_cl['tahun_berdiri'].max())
             biaya_karyawan_min = int(data_cl['biaya_karyawan'].min())
             biaya_karyawan_max = int(data_cl['biaya_karyawan'].max())
             jumlah_pelanggan_min = int(data_cl['jumlah_pelanggan'].min())
             jumlah_pelanggan_max = int(data_cl['jumlah_pelanggan'].max())
 
-            tenaga_kerja_perempuan_mean = data_cl['tenaga_kerja_perempuan'].mean()
-            tenaga_kerja_laki_mean = data_cl['tenaga_kerja_laki_laki'].mean()
-            omset_mean = data_cl['omset'].mean()
-            aset_mean = data_cl['aset'].mean()
-            kapasitas_produksi_mean = data_cl['kapasitas_produksi'].mean()
-            biaya_karyawan_mean = data_cl['biaya_karyawan'].mean()
-            laba_mean = data_cl['laba'].mean()
-            
-            # Format angka pakai format lokal
             omset_range = f"{omset_min:,.0f} – {omset_max:,.0f}".replace(",", ".")
             aset_range = f"{aset_min:,.0f} – {aset_max:,.0f}".replace(",", ".")
-            
-            kap_prod_range = f"{kap_prod_min:,.0f} – {kap_prod_max:,.0f}".replace(",", ".")
             tenaga_laki_range = f"{tenaga_laki_min:,.0f} – {tenaga_laki_max:,.0f}".replace(",", ".")
             tenaga_perempuan_range = f"{tenaga_perempuan_min:,.0f} – {tenaga_perempuan_max:,.0f}".replace(",", ".")
-            jumlah_pelanggan_range = f"{jumlah_pelanggan_min:,.0f} – {jumlah_pelanggan_max:,.0f}".replace(",", ".")
+            kap_prod_range = f"{kap_prod_min:,.0f} – {kap_prod_max:,.0f}".replace(",", ".")
             biaya_karyawan_range = f"{biaya_karyawan_min:,.0f} – {biaya_karyawan_max:,.0f}".replace(",", ".")
-            
+            jumlah_pelanggan_range = f"{jumlah_pelanggan_min:,.0f} – {jumlah_pelanggan_max:,.0f}".replace(",", ".")
 
-            kategori = get_kategori_umkm(omset_mean)
+            nilai_total = omset_mean + aset_mean  # jumlah untuk pengurutan
 
             cluster_summary.append({
-                "Cluster": f"Cluster {cl}",
-                "omset Rata-rata": round(omset_mean, 2),
+                "Cluster": cl,
+                "Omset Rata-rata": round(omset_mean, 2),
                 "Omset Range": omset_range,
                 "Aset Rata-rata": round(aset_mean, 2),
                 "Aset Range": aset_range,
-                "tenaga_kerja_laki Rata-rata": round(tenaga_kerja_laki_mean, 2),
-                "tenaga kerja Range": tenaga_laki_range,
-
-                "Kategori UMKM": kategori
+                "Tenaga Laki-laki Rata-rata": round(tenaga_laki_mean, 2),
+                "Tenaga Kerja Range": tenaga_laki_range,
+                "Nilai Total": nilai_total  # untuk pengurutan
             })
-        # Buat dataframe ringkasan
+
+        # Urutkan berdasarkan total (omset rata-rata + aset rata-rata)
+        cluster_summary = sorted(cluster_summary, key=lambda x: x["Nilai Total"])
+
+        # Tetapkan kategori UMKM berdasarkan 3 terbawah
+        for i, row in enumerate(cluster_summary):
+            if i == 0:
+                kategori = "UMKM Mikro"
+            elif i == 1:
+                kategori = "UMKM Kecil"
+            elif i == 2:
+                kategori = "UMKM Menengah"
+            else:
+                kategori = "UMKM Dapat Dipertimbangkan"
+            row["Kategori UMKM"] = kategori
+
+        # Hapus kolom bantu sebelum ditampilkan
+        for row in cluster_summary:
+            del row["Nilai Total"]
+
         df_summary = pd.DataFrame(cluster_summary)
-        # Tampilkan di UI
         st.dataframe(df_summary, use_container_width=True)
-if score is None:
+
+else:
     col10, col11, col12 = st.columns([1, 5, 1])
-    with col11:
-        st.badge("error", color="green")
+    pass
+
+
 
 
 
